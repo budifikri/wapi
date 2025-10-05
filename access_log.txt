@@ -1,0 +1,10 @@
+2025-10-05 07:40:32 - FAILED accessing https://gi_pos_all.fikricloud.my.id/session/start/f8377d8d-a589-4242-9ba6-9486a04ef80c - Error: 
+{
+  "success": false,
+  "error": "Session already exists for: f8377d8d-a589-4242-9ba6-9486a04ef80c"
+}
+2025-10-05 07:41:56 - FAILED - https://gi_pos_all.fikricloud.my.id/session/start/f8377d8d-a589-4242-9ba6-9486a04ef80c - ResponseTime: 208ms - Error: 
+{
+  "success": false,
+  "error": "Session already exists for: f8377d8d-a589-4242-9ba6-9486a04ef80c"
+}
