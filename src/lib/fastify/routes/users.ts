@@ -69,7 +69,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
       }
 
       // Get user from database
-      const user = await fastify.prisma.user.findUnique({
+      const user = await fastify.prisma.users.findUnique({
         where: { id: payload.userId },
         select: {
           id: true,
@@ -176,7 +176,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
       }
 
       // Update user
-      const updatedUser = await fastify.prisma.user.update({
+      const updatedUser = await fastify.prisma.users.update({
         where: { id: payload.userId },
         data: {
           ...(name && { name }),
@@ -278,7 +278,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
       }
 
       // Get user with password
-      const user = await fastify.prisma.user.findUnique({
+      const user = await fastify.prisma.users.findUnique({
         where: { id: payload.userId },
         select: {
           id: true,
@@ -304,7 +304,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
       const hashedNewPassword = await AuthUtils.hashPassword(newPassword);
 
       // Update password
-      await fastify.prisma.user.update({
+      await fastify.prisma.users.update({
         where: { id: user.id },
         data: { password: hashedNewPassword }
       });
@@ -373,7 +373,7 @@ export default async function userRoutes(fastify: FastifyInstance) {
       }
 
       // Delete user (cascade delete will handle related records)
-      await fastify.prisma.user.delete({
+      await fastify.prisma.users.delete({
         where: { id: payload.userId }
       });
 

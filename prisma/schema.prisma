@@ -9,11 +9,11 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model User {
+model users {
   id            String   @id @default(cuid())
   email         String   @unique
   name          String?
@@ -25,8 +25,13 @@ model User {
   isEmailVerified Boolean @default(false) // Email verification status
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
-  
   posts         Post[]
+  apikeys   apikeys[]
+  devices   devices[]
+  status    Boolean   @default(false)
+  whatsapp  String?   @unique
+
+  @@index([email])
 }
 
 
@@ -39,5 +44,92 @@ model Post {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   
-  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  author    users    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+}
+
+
+model apikeys {
+  id          String   @id @default(cuid())
+  userId      String
+  token       String?
+  status      Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  description String?
+  users       users    @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+
+model contacts {
+  id              Int      @id @default(autoincrement())
+  uuid            String   @unique
+  deviceKey       String
+  contactId       String   @unique
+  contactName     String?  // Removed @db.VarChar for PostgreSQL compatibility
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime
+  isBusiness      Boolean?
+  isGroup         Boolean?
+  isUser          Boolean?
+  name            String?
+  number          String?
+  serialized      String?
+  shortName       String?
+  businessProfile Json?    // Store the complete business profile object
+  description     String?  // Business description from businessProfile
+  email           String?  // Business email from businessProfile
+  website         String?  // Business website from businessProfile
+  address         String?  // Business address from businessProfile
+  latitude        Float?   // Business location latitude
+  longitude       Float?   // Business location longitude
+  categories      Json?    // Business categories from businessProfile
+  devices         devices  @relation(fields: [deviceKey], references: [key])
+
+  @@index([contactId])
+  @@index([deviceKey])
+}
+
+model devices {
+  id        String   @id @default(cuid())
+  uuid      String   @unique
+  key       String   @unique
+  sessionId String   @unique
+  number    String
+  status    String
+  ready     Boolean    @default(false)
+  webhook   Boolean    @default(false)
+  url       String?
+  expired   Int?       @default(0)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  contacts  contacts[]
+  users     users      @relation(fields: [userId], references: [id])
+  messages  messages[]
+
+  @@index([userId])
+}
+
+model messages {
+  id        Int      @id @default(autoincrement())
+  uuid      String   @unique
+  deviceKey String
+  messageId String   @unique
+  read      Int      @default(1)
+  noTujuan  String?
+  text      String?
+  isGroup   Boolean  @default(false)
+  secure    Boolean  @default(false)
+  timestamp Int?
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  from      String?
+  fromMe    Boolean? @default(false)
+  to        String?
+  type      String?
+  devices   devices  @relation(fields: [deviceKey], references: [key])
+
+  @@index([deviceKey])
 }

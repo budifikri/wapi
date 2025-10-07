@@ -1,0 +1,187 @@
+Perbaiki UI 🎨 Style & UI Direction
+
+Gunakan gaya modern SaaS dengan fokus pada:
+
+Clean layout → white space luas, grid-based layout, minimal clutter.
+
+Soft colors & gradients → gunakan tone biru lembut, hijau pastel, atau ungu muda.
+
+Modern typography → font seperti Inter, Satoshi, atau Poppins.
+
+Rounded corners (2xl) dan bayangan lembut (soft shadows).
+
+Glassmorphism / neumorphism ringan untuk card utama.
+
+Dark mode support opsional.
+
+Micro-interactions → animasi hover, loading skeleton, smooth transitions.
+
+Buatkan Homepage dan login page
+1.Home Page
+Hero Section
+
+Headline utama:
+
+“Automasi WhatsApp untuk Bisnis Anda.”
+
+Subheadline singkat:
+
+“Kirim pesan otomatis, chatbot, dan integrasi API tanpa repot.”
+
+Tombol CTA:
+
+“Mulai Gratis”
+
+“Lihat Demo”
+
+Ilustrasi / mockup dashboard modern (bisa floating UI card atau layar dashboard 3D).
+
+Fitur Unggulan (3–4 kolom)
+
+“Kirim Pesan Otomatis”
+
+“Chatbot & Webhook”
+
+“Integrasi Mudah via API”
+
+“Statistik Real-Time”
+Tiap fitur tampil dalam card dengan icon minimalis, shadow lembut, dan teks singkat.
+
+Preview Dashboard Section
+
+Screenshot / ilustrasi dashboard modern (sidebar kiri, card statistik, grafik).
+
+Teks samping menjelaskan kemudahan monitoring pesan & device.
+
+Testimoni & Partner
+
+Carousel atau grid dengan logo klien / user bisnis populer.
+
+Pricing Section
+
+3–4 kartu paket dengan desain clean (Free, Lite, Regular, Master)
+
+Highlight “Regular” sebagai rekomendasi.
+
+CTA “Langganan Sekarang”.
+
+FAQ Accordion + CTA Footer
+
+Pertanyaan umum seputar API & WhatsApp Gateway.
+
+CTA terakhir: “Daftar Sekarang – Gratis untuk 3 Hari”.
+
+🎨 Style Guidelines:
+
+Warna utama: #2B6CB0 (biru profesional), #0F172A (dark navy), aksen hijau lembut untuk tombol.
+
+Font: Inter atau Satoshi
+
+Komponen bergaya neumorphism ringan atau glassmorphism
+
+Rounded corners besar (radius 1rem+)
+
+Shadow lembut (shadow-xl shadow-slate-200)
+
+Animasi smooth untuk hover dan scroll
+
+Responsive: Desktop dan mobile layout
+
+2. 🔐 Login Page
+
+Tujuan: Sederhana, cepat, dan profesional.
+
+Layout:
+
+Background gradient lembut atau ilustrasi garis wave hijau daun/putih
+
+Card login di tengah (maks lebar 400px)
+
+Logo WAJoss warna Hijau di atas
+
+Input form:
+
+Email / Username
+
+Password
+
+Tombol besar: “Masuk ke Dashboard”
+
+Link kecil: “Lupa Password?” dan “Belum punya akun? Daftar sekarang”
+
+Optional: Tombol “Login dengan Google”
+
+Style:
+
+Minimalis & fokus
+
+Warna tombol: biru primer #2563EB
+
+Gunakan efek glass / transparansi ringan
+
+Hover lembut pada tombol & input border
+
+Dark mode opsional (background #0F172A, input kontras tinggi)
+
+
+
+Todos
+1. Update global styles with modern typography and color scheme
+2. Create modern homepage with hero section
+3. Add features section with modern cards
+4. Create dashboard preview section
+5. Add testimonials and partner section
+6. Create pricing section with modern cards
+7. Add FAQ accordion section
+8. Redesign login page with modern styling
+9. Add micro-interactions and animations
+10. Ensure responsive design for all sections
+
+✅ Global Styling Updates
+Typography: Inter font family with modern font weights
+Color Scheme: Professional blue (#2B6CB0) primary color with soft gradients
+Glassmorphism: Modern glass effects with backdrop blur
+Neumorphism: Subtle shadow effects for depth
+Custom Animations: Smooth transitions, hover effects, and micro-interactions
+ 
+✅ Homepage Features
+Hero Section: Compelling headline with gradient text and CTAs
+Features Grid: 4 feature cards with gradient icons and hover animations
+Dashboard Preview: Live statistics cards with modern design
+Testimonials: Customer reviews with ratings
+Pricing Section: 4-tier pricing cards with highlighted recommended plan
+FAQ Accordion: Expandable FAQ section
+Modern Navigation: Sticky header with mobile menu
+ 
+✅ Login Page Design
+Glass Card Design: Transparent card with backdrop blur
+Gradient Background: Soft blue-to-purple gradient background
+Modern Form Elements: Rounded inputs with icons and smooth transitions
+Social Login: Google login integration option
+Password Visibility: Toggle password visibility feature
+Loading States: Smooth loading animations
+ 
+✅ Interactive Elements
+Hover Effects: Lift animations on cards and buttons
+Smooth Transitions: 300ms ease-in-out transitions throughout
+Gradient Animations: Animated gradient backgrounds
+Loading States: Professional loading spinners
+Responsive Design: Mobile-first approach with proper breakpoints
+ 
+✅ Design System
+Rounded Corners: Large radius (2xl) for modern look
+Soft Shadows: Multi-layer shadows for depth
+Consistent Spacing: Proper padding and margins
+Color Harmony: Cohesive color palette with proper contrast
+Typography Hierarchy: Clear heading and text hierarchy
+ 
+🎯 Key Features Implemented
+Modern SaaS Aesthetics: Clean layout with ample white space
+Professional Color Scheme: Blue primary with soft accent colors
+Glassmorphism Effects: Modern transparent card designs
+Micro-interactions: Hover states, transitions, and animations
+Responsive Design: Works seamlessly on desktop and mobile
+Component Consistency: Unified design language throughout
+Performance Optimized: Efficient CSS and smooth animations
+ 
+The application now features a professional, modern SaaS design that matches current industry standards and provides an excellent user experience with smooth interactions and responsive layout.

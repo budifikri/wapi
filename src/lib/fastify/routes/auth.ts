@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { AuthUtils } from '../utils/auth';
 import { tokenBlacklist } from '../utils/token-blacklist';
 import { generateEmailToken, sendVerificationEmail } from '../../email';
+import * as crypto from 'crypto';
 
 interface RegisterBody {
   email: string;
@@ -88,7 +89,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
       const { email, password, name } = request.body;
 
       // Check if user already exists
-      const existingUser = await fastify.prisma.user.findUnique({
+      const existingUser = await fastify.prisma.users.findUnique({
         where: { email }
       });
 
@@ -105,7 +106,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
       const emailToken = generateEmailToken();
 
       // Create user with email verification token
-      const user = await fastify.prisma.user.create({
+      const user = await fastify.prisma.users.create({
         data: {
           email,
           password: hashedPassword,
@@ -121,6 +122,26 @@ export default async function authRoutes(fastify: FastifyInstance) {
           createdAt: true
         }
       });
+
+      // Create initial API key for the user
+      try {
+        // Generate a secure API key token
+        const apiKeyToken = `wapi_${crypto.randomBytes(32).toString('hex')}`;
+        // Store the plain token directly (for compatibility with existing database records)
+        const plainApiKey = apiKeyToken;
+        
+        await fastify.prisma.apikeys.create({
+          data: {
+            userId: user.id,
+            token: plainApiKey, // Store the plain token, not the hash
+            status: true,
+            description: 'Initial API key created with account'
+          }
+        });
+      } catch (apiKeyError) {
+        console.error('Failed to create initial API key:', apiKeyError);
+        // Don't fail registration if API key creation fails, but log it
+      }
 
       // Send verification email
       try {
@@ -191,7 +212,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
       const { token } = request.query;
 
       // Find user by verification token
-      const user = await fastify.prisma.user.findFirst({
+      const user = await fastify.prisma.users.findFirst({
         where: { 
           emailToken: token,
           isEmailVerified: false
@@ -205,7 +226,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
       }
 
       // Update user as verified
-      const updatedUser = await fastify.prisma.user.update({
+      const updatedUser = await fastify.prisma.users.update({
         where: { id: user.id },
         data: {
           isEmailVerified: true,
@@ -293,7 +314,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
       const { email } = request.body;
 
       // Find user
-      const user = await fastify.prisma.user.findUnique({
+      const user = await fastify.prisma.users.findUnique({
         where: { email }
       });
 
@@ -313,7 +334,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
       const emailToken = generateEmailToken();
 
       // Update user with new token
-      await fastify.prisma.user.update({
+      await fastify.prisma.users.update({
         where: { id: user.id },
         data: { emailToken }
       });
@@ -400,7 +421,7 @@ export default async function authRoutes(fastify: FastifyInstance) {
       const { email, password } = request.body;
 
       // Find user
-      const user = await fastify.prisma.user.findUnique({
+      const user = await fastify.prisma.users.findUnique({
         where: { email }
       });
 
@@ -519,26 +540,31 @@ export default async function authRoutes(fastify: FastifyInstance) {
         });
       }
 
+      // Check if prisma is available
+      if (!fastify.prisma) {
+        throw new Error('Database connection is not available');
+      }
+
       // Check if user exists
-      let user = await fastify.prisma.user.findUnique({
+      let user = await fastify.prisma.users.findUnique({
         where: { googleId: userInfo.id }
       });
 
       if (!user) {
         // Check if user exists with same email
-        user = await fastify.prisma.user.findUnique({
+        user = await fastify.prisma.users.findUnique({
           where: { email: userInfo.email }
         });
 
         if (user) {
           // Link Google account to existing user
-          user = await fastify.prisma.user.update({
+          user = await fastify.prisma.users.update({
             where: { id: user.id },
             data: { googleId: userInfo.id }
           });
         } else {
           // Create new user
-          user = await fastify.prisma.user.create({
+          user = await fastify.prisma.users.create({
             data: {
               email: userInfo.email,
               name: userInfo.name,
@@ -548,6 +574,26 @@ export default async function authRoutes(fastify: FastifyInstance) {
               isEmailVerified: true // Google OAuth users are automatically verified
             }
           });
+
+          // Create initial API key for the new Google OAuth user
+          try {
+            // Generate a secure API key token
+            const apiKeyToken = `wapi_${crypto.randomBytes(32).toString('hex')}`;
+            // Store the plain token directly (for compatibility with existing database records)
+            const plainApiKey = apiKeyToken;
+            
+            await fastify.prisma.apikeys.create({
+              data: {
+                userId: user.id,
+                token: plainApiKey, // Store the plain token, not the hash
+                status: true,
+                description: 'Initial API key created via Google OAuth'
+              }
+            });
+          } catch (apiKeyError) {
+            console.error('Failed to create initial API key for Google OAuth user:', apiKeyError);
+            // Don't fail authentication if API key creation fails, but log it
+          }
         }
       }
 

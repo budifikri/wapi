@@ -1,0 +1,37 @@
+
+
+5 okt 2025
+ Session Start Endpoint Implementation
+
+  1. Endpoint Created ✅
+   - URL: {URL_API}/session/start/{sessionID}
+   - Method: GET
+   - Authentication: Requires valid API key in x-api-key header
+   - Functionality: Forwards requests to remote server and returns the same response
+
+  2. Environment Variables ✅
+   - REMOTE_API_KEY = "654321" (stored in .env file)
+   - REMOTE_URL_API = "https://gi_pos_all.fikricloud.my.id" (stored in .env file)
+
+  3. Security Features ✅
+   - API Key Validation: Verifies the provided API key exists in the database and is active
+   - Hash Comparison: Uses secure hashed comparison for API key validation
+   - Access Control: Only allows access with valid, active API keys
+
+  4. Implementation Details ✅
+   - Request Forwarding: Makes HTTP request to remote server using fetch API
+   - Header Propagation: Forwards the request with the REMOTE_API_KEY header
+   - Response Relay: Returns the exact response received from the remote server
+   - Error Handling: Proper error handling for network issues and invalid configurations
+
+  5. Route Registration ✅
+   - File: src/lib/fastify/routes/sessions.ts
+   - Registration: Added to main application in app.ts
+   - Swagger Documentation: Includes proper schema documentation for API documentation
+
+  6. API Flow ✅
+   1. Client makes request to {URL_API}/session/start/{sessionID} with valid API key
+   2. Server validates API key against database (checking hashed values)
+   3. Server forwards request to ${REMOTE_URL_API}/session/start/{sessionID} with REMOTE_API_KEY
+   4. Remote server processes request and sends response back
+   5. Local server relays the response back to the client

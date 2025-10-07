@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+import * as crypto from 'crypto';
 import { FastifyRequest } from 'fastify';
 
 export interface JWTPayload {
@@ -54,5 +55,36 @@ export class AuthUtils {
       password += charset.charAt(Math.floor(Math.random() * charset.length));
     }
     return password;
+  }
+
+  static encryptApiKey(token: string): string {
+    const algorithm = 'aes-256-cbc';
+    const key = process.env.API_KEY_ENCRYPTION_KEY || 'your-super-secret-encryption-key-32chars';
+    const iv = crypto.randomBytes(16); // Generate a random IV for each encryption
+    
+    if (key.length < 32) {
+      // Pad the key to 32 bytes if it's too short
+      const padding = Buffer.alloc(32 - key.length);
+      padding.fill(0);
+      const paddedKey = Buffer.concat([Buffer.from(key), padding]);
+    }
+    
+    const cipher = crypto.createCipher(algorithm, Buffer.from(key.slice(0, 32)));
+    let encrypted = cipher.update(token, 'utf8', 'hex');
+    encrypted += cipher.final('hex');
+    
+    // Return IV + encrypted data (IV is not secret, just needed for decryption)
+    return iv.toString('hex') + ':' + encrypted;
+  }
+
+  static hashApiKey(token: string): string {
+    // Create a hash of the API key using SHA-256
+    return crypto.createHash('sha256').update(token).digest('hex');
+  }
+  
+  static compareApiKey(token: string, hashedToken: string): boolean {
+    // Hash the provided token and compare it to the stored hash
+    const hashedProvidedToken = crypto.createHash('sha256').update(token).digest('hex');
+    return hashedProvidedToken === hashedToken;
   }
 }
